@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>海賊版・違法アニメサイト 危険度チェッカー</title>
+    <title>Block Illegal</title>
+    <link rel="icon" href="B.png">
     <style>
         :root { --primary-color: #e50914; --safe-color: #2da44e; --dark-color: #141414; --card-color: #2f2f2f; --text-color: #ffffff; --accent-color: #ffc107; --info-color: #007bff; }
         body { font-family: sans-serif; background-color: var(--dark-color); color: var(--text-color); margin: 0; padding: 0; line-height: 1.6; }
@@ -34,8 +35,8 @@
 </head>
 <body>
     <header>
-        <h1>海賊版アニメサイト 危険度チェッカー</h1>
-        <p>探しているそのサイト、本当に安全ですか？ウイルスの罠を見破ろう</p>
+        <h1>海賊版アニメサイト チェッカー</h1>
+        <p>そのサイト、本当に安全？</p>
     </header>
     <div class="container">
         <div class="checker-box">
@@ -53,7 +54,7 @@
             <div id="box-safe-domestic" class="alert-box safe-alert">
                 <h4 style="color:var(--safe-color);margin:0 0 10px 0;">✨ 安心：100%安全な国内公式サービスです</h4>
                 <p>日本の正規の許諾を得た安心のプラットフォームです。ウイルスや罰則の心配は一切ありません。</p>
-                <a id="safe-link-domestic" href="#" target="_blank" rel="noopener noreferrer" class="link-button">👉 公式サイトを開く</a>
+                <a id="safe-link-domestic" href="#" target="_blank" rel="noopener noreferrer" class="link-button">→ 公式サイトを開く</a>
             </div>
 
             <div id="box-safe-foreign" class="alert-box safe-alert">
@@ -61,7 +62,7 @@
                 <p>海外向けにライセンスを取得して配信している本物の公式プラットフォームです。サイト自体にウイルスの危険はありません。</p>
                 <p style="color:var(--accent-color); font-weight:bold; margin-bottom:0;">【注意：学校のネット環境での利用について】</p>
                 <p style="margin-top:0;">日本の学校や企業のフィルタリングソフト（i-FILTERなど）では、海外のエンタメサイトが一括でブロックされる仕組みになっているため、弾かれることがあります。</p>
-                <a id="safe-link-foreign" href="#" target="_blank" rel="noopener noreferrer" class="link-button">👉 公式サイトを開く</a>
+                <a id="safe-link-foreign" href="#" target="_blank" rel="noopener noreferrer" class="link-button">→ 公式サイトを開く</a>
             </div>
 
             <div id="box-general" class="alert-box info-alert">
@@ -104,7 +105,7 @@
         const illegalSites = ['animeheaven', 'animepahe', 'kissanime', '9anime', '123anime', 'reanime', 'aniwave', 'kuudere', 'hianime', 'animekai', 'anikaizoku', 'animekaizen', 'animedrive', 'gogoanime', 'witanime', 'katanime', 'yomi', 'aniwaves', 'miruro', 'aniwatchtv', 'bestfreestreaming', 'animeflixtv', 'anime-rift', '123animehub', 'aniwatch', 'anidb'];
         const verifiedGeneralSites = ['google', 'yahoo', 'youtube', 'wikipedia', 'bing', 'twitter', 'x.com', 'instagram', 'github', 'zoom', 'spotify', 'apple', 'microsoft', 'discord', 'line', 'amazon', 'tiktok', 'facebook', 'note', 'duckduckgo', 'nintendo', 'sony', 'playstation', 'sega', 'capcom', 'square-enix', 'steam'];
         const safeAnimeSites = [
-            { key: 'danime', name: 'dアニメストア', url: 'https://docomo.ne.jp' },
+            { key: 'danime', name: 'dアニメストア', url: 'https://animestore.docomo.ne.jp/' },
             { key: 'unext', name: 'U-NEXT', url: 'https://unext.jp' },
             { key: 'dmmtv', name: 'DMM TV', url: 'https://dmm.com' },
             { key: 'primevideo', name: 'Amazonプライム・ビデオ', url: 'https://primevideo.com' },
