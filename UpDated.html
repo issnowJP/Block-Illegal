@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>海賊版・違法アニメサイト 危険度チェッカー</title>
+    <style>
+        :root { --primary-color: #e50914; --safe-color: #2da44e; --dark-color: #141414; --card-color: #2f2f2f; --text-color: #ffffff; --accent-color: #ffc107; --info-color: #007bff; }
+        body { font-family: sans-serif; background-color: var(--dark-color); color: var(--text-color); margin: 0; padding: 0; line-height: 1.6; }
+        header { background-color: #000; text-align: center; padding: 30px 20px; border-bottom: 5px solid var(--primary-color); }
+        header h1 { margin: 0; color: var(--primary-color); font-size: 1.8rem; }
+        .container { max-width: 700px; margin: 0 auto; padding: 20px; }
+        .checker-box { background-color: var(--card-color); border-radius: 8px; padding: 20px; text-align: center; margin-bottom: 30px; }
+        .input-group { display: flex; justify-content: center; margin-top: 15px; gap: 10px; }
+        input[type="text"] { width: 70%; padding: 10px; border: 2px solid #555; border-radius: 4px; background-color: #1f1f1f; color: white; font-size: 1rem; }
+        button { padding: 10px 20px; background-color: var(--primary-color); color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
+        .alert-box { display: none; margin-top: 20px; padding: 20px; border-radius: 6px; text-align: left; }
+        .danger-alert { background-color: rgba(229, 9, 20, 0.15); border: 2px solid var(--primary-color); border-left: 8px solid var(--primary-color); }
+        .safe-alert { background-color: rgba(45, 164, 78, 0.15); border: 2px solid var(--safe-color); border-left: 8px solid var(--safe-color); }
+        .info-alert { background-color: rgba(0, 123, 255, 0.15); border: 2px solid #007bff; border-left: 8px solid #007bff; }
+        .warning-alert { background-color: rgba(255, 193, 7, 0.1); border: 2px solid var(--accent-color); border-left: 8px solid var(--accent-color); }
+        .link-button { display: inline-block; margin-top: 10px; padding: 8px 16px; background-color: var(--safe-color); color: white; text-decoration: none; border-radius: 4px; font-weight: bold; }
+        .list-toggle { background-color: #222; color: #fff; cursor: pointer; padding: 15px; width: 100%; border: 1px solid #444; border-radius: 4px; text-align: left; font-size: 1rem; font-weight: bold; margin-bottom: 10px; }
+        .list-content { padding: 0 15px; display: none; background-color: #1a1a1a; border-left: 4px solid var(--primary-color); margin-bottom: 20px; border-radius: 0 0 4px 4px; }
+        .list-content.safe-list-border { border-left-color: var(--safe-color); }
+        .badge-grid { display: flex; flex-wrap: wrap; gap: 8px; padding: 15px 0; }
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; background-color: #333; }
+        .badge.danger-badge { background-color: rgba(229, 9, 20, 0.3); color: #ff8080; border: 1px solid var(--primary-color); }
+        .badge.safe-badge { background-color: rgba(45, 164, 78, 0.3); color: #80ff80; border: 1px solid var(--safe-color); }
+        .info-section { background-color: #1f1f1f; border-radius: 8px; padding: 20px; margin-bottom: 20px; border: 1px solid #333; }
+        .warning-text { color: var(--primary-color); font-weight: bold; }
+        footer { text-align: center; padding: 20px; color: #666; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>海賊版アニメサイト 危険度チェッカー</h1>
+        <p>探しているそのサイト、本当に安全ですか？ウイルスの罠を見破ろう</p>
+    </header>
+    <div class="container">
+        <div class="checker-box">
+            <h2>サイト名や配信サービス名を入力してください</h2>
+            <div class="input-group">
+                <input type="text" id="site-input" placeholder="例: HiAnime, dアニメストア..." onkeydown="if(event.key === 'Enter') checkSite()">
+                <button onclick="checkSite()">判定する</button>
+            </div>
+
+            <div id="box-danger" class="alert-box danger-alert">
+                <h4 style="color:var(--primary-color);margin:0 0 10px 0;">❌ 警告：極めて危険な違法サイトです</h4>
+                <p>国際的な摘発で既に閉鎖されているか、ウイルスの温床です。絶対に開かないでください！</p>
+            </div>
+
+            <div id="box-safe-domestic" class="alert-box safe-alert">
+                <h4 style="color:var(--safe-color);margin:0 0 10px 0;">✨ 安心：100%安全な国内公式サービスです</h4>
+                <p>日本の正規の許諾を得た安心のプラットフォームです。ウイルスや罰則の心配は一切ありません。</p>
+                <a id="safe-link-domestic" href="#" target="_blank" rel="noopener noreferrer" class="link-button">👉 公式サイトを開く</a>
+            </div>
+
+            <div id="box-safe-foreign" class="alert-box safe-alert">
+                <h4 style="color:var(--safe-color);margin:0 0 10px 0;">ℹ️ 判定：海外の正規（公式）アニメ配信サービスです</h4>
+                <p>海外向けにライセンスを取得して配信している本物の公式プラットフォームです。サイト自体にウイルスの危険はありません。</p>
+                <p style="color:var(--accent-color); font-weight:bold; margin-bottom:0;">【注意：学校のネット環境での利用について】</p>
+                <p style="margin-top:0;">日本の学校や企業のフィルタリングソフト（i-FILTERなど）では、海外のエンタメサイトが一括でブロックされる仕組みになっているため、弾かれることがあります。</p>
+                <a id="safe-link-foreign" href="#" target="_blank" rel="noopener noreferrer" class="link-button">👉 公式サイトを開く</a>
+            </div>
+
+            <div id="box-general" class="alert-box info-alert">
+                <h4 style="color:#007bff;margin:0 0 10px 0;">ℹ️ 一般的な大手ウェブサイト・Webツールです</h4>
+                <p>入力されたサイトは安全な一般大手サービス、または教育・公的機関のサイトです。安心してご利用いただけます。</p>
+            </div>
+
+            <div id="box-warning" class="alert-box warning-alert">
+                <h4 style="color:var(--accent-color);margin:0 0 10px 0;">🔍 判定結果：公式アニメ配信リスト未登録のサイトです</h4>
+                <p>入力されたアドレスは、アニメ見放題サービスの公式リストには登録されていません。</p>
+                <p style="margin-bottom: 5px;"><strong>❓ これは【無料アニメ視聴サイト】ですか？</strong></p>
+                <p style="margin-top: 0; color: var(--primary-color); font-weight: bold;">【はい】の場合：名前を変えて新しく作られた違法海賊版サイト（罠サイト）の危険性が非常に高いです。アクセスは絶対にやめてください！</p>
+                <p style="margin-top: 0; color: #ccc;">【いいえ】の場合：学校、ゲーム、ブログ、企業の普通の公式ホームページであれば100%安全ですので、そのまま利用して問題ありません。</p>
+            </div>
+        </div>
+
+        <button class="list-toggle" onclick="toggleList('danger-list')">⚠️ 登録済みの危険・違法サイト一覧を見る</button>
+        <div id="danger-list" class="list-content">
+            <div class="badge-grid" id="danger-badges"></div>
+        </div>
+
+        <button class="list-toggle" onclick="toggleList('safe-list')" style="border-left: 4px solid var(--safe-color);">✨ 正規の安心・公式アニメ配信サービス一覧を見る</button>
+        <div id="safe-list" class="list-content safe-list-border">
+            <div class="badge-grid" id="safe-badges"></div>
+        </div>
+
+        <div class="info-section">
+            <h3>⚠️ 違法サイトに潜む「3大リスク」</h3>
+            <ul>
+                <li><span class="warning-text">端末のウイルス感染:</span> ボタンを押しただけで裏で不正プログラムが起動。</li>
+                <li><span class="warning-text">個人情報窃盗:</span> 偽のセキュリティ警告でクレカ情報を盗む手口が多発。</li>
+                <li><span class="warning-text">刑事罰のリスク:</span> 違法と知りながらダウンロードする行為は2年以下の懲役や罰金の対象。</li>
+            </ul>
+        </div>
+    </div>
+    <footer><p>&copy; 海賊版サイト撲滅・注意喚起プロジェクト</p></footer>
+
+    <script>
+        // 💡 修正ポイント：新しく教えてもらった aniwatch(すでにリストにあるため確実に検知可能) と anidb をブラックリストに追加！
+        const illegalSites = ['animeheaven', 'animepahe', 'kissanime', '9anime', '123anime', 'reanime', 'aniwave', 'kuudere', 'hianime', 'animekai', 'anikaizoku', 'animekaizen', 'animedrive', 'gogoanime', 'witanime', 'katanime', 'yomi', 'aniwaves', 'miruro', 'aniwatchtv', 'bestfreestreaming', 'animeflixtv', 'anime-rift', '123animehub', 'aniwatch', 'anidb'];
+        const verifiedGeneralSites = ['google', 'yahoo', 'youtube', 'wikipedia', 'bing', 'twitter', 'x.com', 'instagram', 'github', 'zoom', 'spotify', 'apple', 'microsoft', 'discord', 'line', 'amazon', 'tiktok', 'facebook', 'note', 'duckduckgo', 'nintendo', 'sony', 'playstation', 'sega', 'capcom', 'square-enix', 'steam'];
+        const safeAnimeSites = [
+            { key: 'danime', name: 'dアニメストア', url: 'https://docomo.ne.jp' },
+            { key: 'unext', name: 'U-NEXT', url: 'https://unext.jp' },
+            { key: 'dmmtv', name: 'DMM TV', url: 'https://dmm.com' },
+            { key: 'primevideo', name: 'Amazonプライム・ビデオ', url: 'https://primevideo.com' },
+            { key: 'netflix', name: 'Netflix', url: 'https://netflix.com' },
+            { key: 'hulu', name: 'Hulu', url: 'https://hulu.jp' },
+            { key: 'abema', name: 'ABEMA', url: 'https://abema.tv' },
+            { key: 'hidive', name: 'HIDIVE（海外公式）', url: 'https://hidive.com', isForeign: true },
+            { key: 'mewatch', name: 'meWATCH', url: 'https://mewatch.sg', isForeign: true }
+        ];
+
+        window.onload = function() {
+            illegalSites.forEach(s => { document.getElementById('danger-badges').innerHTML += `<span class="badge danger-badge">${s}</span>`; });
+            [...new Set(safeAnimeSites.map(i => i.name))].forEach(n => { document.getElementById('safe-badges').innerHTML += `<span class="badge safe-badge">${n}</span>`; });
+        };
+
+        function toggleList(id) {
+            const el = document.getElementById(id);
+            el.style.display = el.style.display === "block" ? "none" : "block";
+        }
+
+        function checkSite() {
+            const raw = document.getElementById('site-input').value.trim();
+            if (!raw) { alert('サイト名を入力してください。'); return; }
+            
+            let input = raw.toLowerCase().replace('https://', '').replace('http://', '').replace('www.', '').replace(/:/g, '');
+            if (input.includes('/')) { input = input.split('/')[0]; } // 💡 スラッシュ分割のバグが起きないよう安全に修正
+
+            document.querySelectorAll('.alert-box').forEach(box => box.style.display = 'none');
+
+            const isIllegal = illegalSites.some(s => input.includes(s));
+            const matchedSafe = safeAnimeSites.find(s => input.includes(s.key));
+            // 💡 ここから続きです
+            const isGeneral = verifiedGeneralSites.some(s => input.includes(s)) || ['.edu', '.ed.jp', '.go.jp', '.gov'].some(p => input.includes(p));
+
+            if (isIllegal) {
+                // 1. 危険（海賊版）サイトの場合
+                document.getElementById('box-danger').style.display = 'block';
+            } else if (matchedSafe) {
+                // 2. 公式アニメ配信サービスの場合
+                if (matchedSafe.isForeign) {
+                    document.getElementById('safe-link-foreign').href = matchedSafe.url;
+                    document.getElementById('box-safe-foreign').style.display = 'block';
+                } else {
+                    document.getElementById('safe-link-domestic').href = matchedSafe.url;
+                    document.getElementById('box-safe-domestic').style.display = 'block';
+                }
+            } else if (isGeneral) {
+                // 3. 一般的な大手サイト・教育機関の場合
+                document.getElementById('box-general').style.display = 'block';
+            } else {
+                // 4. リスト未登録（新規サイトの可能性）の場合
+                document.getElementById('box-warning').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
